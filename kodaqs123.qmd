@@ -4,16 +4,99 @@ format: docx
 editor: visual
 ---
 
-## Quarto
+## RQ: Can we predict flower speices based on their characteristics
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
+Unfortunately I cannot share my own data for this assignment, so I just do a simply analysis of classifying three flower species based on three of their characteristics. The analysis is based on the example data set (IRIS) pre-loaded to Rstudio.
 
 When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
 
-```{r}
-1 + 1
+```{r,data preparation}
+# Load time-stamped repositories with a freeze date
+options(repos = c(CRAN = "https://packagemanager.posit.co/cran/2025-04-10"))
+library(ggh4x)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+
+# Exploratory data analysis
+head(iris)
+table(iris$Species)
+
+# 
+iris_long <- iris %>% pivot_longer(cols = starts_with("Sepal") | starts_with("Petal"),names_to = "Measurement", values_to = "Value") 
+
+ggplot(iris_long, aes(x = Value)) +
+  geom_histogram(binwidth = 0.1, fill = "grey", color = "black", alpha = 0.7) +
+  facet_wrap(~Measurement, scales = "free") +
+  labs(title = "All Species", x = "Value", y = "Frequency") +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facetted_pos_scales(x= list(
+    scale_x_continuous(breaks = scales::pretty_breaks(n =8),limits = c(0,8)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 3),limits = c(0,3)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(4,9)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(1,5))))
+  
+  
+
+
+
+# 50 setosa, 50 versicolor, 50 virginica 
+setosa <- subset(iris, Species == "setosa")
+versi <- subset(iris, Species == "versicolor")
+virgin <- subset(iris, Species == "virginica")
+
+# Distribtion of setosa characteristics
+setosa_long <- setosa %>% pivot_longer(cols = starts_with("Sepal") | starts_with("Petal"),names_to = "Measurement", values_to = "Value")
+
+#1 Create the plots with facet_wrap
+ggplot(setosa_long, aes(x = Value)) +
+  geom_histogram(binwidth = 0.1, fill = "grey", color = "black", alpha = 0.7) +
+  facet_wrap(~Measurement, scales = "free") +
+  labs(title = "Setosa", x = "Value", y = "Frequency") +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+facetted_pos_scales(x= list(
+    scale_x_continuous(breaks = scales::pretty_breaks(n =8),limits = c(0,8)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 3),limits = c(0,3)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(4,9)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(1,5))))
+
+#2 Distribution of versicolor
+
+versi_long <- versi %>% pivot_longer(cols = starts_with("Sepal") | starts_with("Petal"),names_to = "Measurement", values_to = "Value")
+
+# Create the plots with facet_wrap
+ggplot(versi_long, aes(x = Value)) +
+  geom_histogram(binwidth = 0.1, fill = "grey", color = "black", alpha = 0.7) +
+  facet_wrap(~Measurement, scales = "free") +
+  labs(title = "Versicolor", x = "Value", y = "Frequency") +
+  theme_bw()+ 
+  theme(plot.title = element_text(hjust = 0.5))+
+  facetted_pos_scales(x= list(
+    scale_x_continuous(breaks = scales::pretty_breaks(n =8),limits = c(0,8)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 3),limits = c(0,3)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(4,9)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(1,5))))
+
+#3 Distribution of virginica
+virgin_long <- virgin %>% pivot_longer(cols = starts_with("Sepal") | starts_with("Petal"),names_to = "Measurement", values_to = "Value")
+
+# Create the plots with facet_wrap
+ggplot(virgin_long, aes(x = Value)) +
+  geom_histogram(binwidth = 0.1, fill = "grey", color = "black", alpha = 0.7) +
+  facet_wrap(~Measurement, scales = "free") +
+  labs(title = "Virginica", x = "Value", y = "Frequency") +
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5))+
+  facetted_pos_scales(x= list(
+    scale_x_continuous(breaks = scales::pretty_breaks(n =8),limits = c(0,8)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 3),limits = c(0,3)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(4,9)),
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 5),limits = c(1,5))))
+  
+
+
 ```
 
 You can add options to executable code like this
@@ -23,4 +106,4 @@ You can add options to executable code like this
 2 * 2
 ```
 
-My favourite thing in the world is quorto
+My favourite thing to do is not kodaqs
